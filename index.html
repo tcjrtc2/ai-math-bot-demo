@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NSUAI</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>NSU Mathematics GPT</h1>
+    <textarea id="prompt" placeholder="Enter your math problem here..."></textarea>
+    <button id="submit">Solve</button>
+    <div id="response"></div>
+    <div id="suggestions" class="suggestions hidden">
+      <h3>What would you like to do next?</h3>
+      <div class="suggestion-buttons">
+        <button class="suggestion-btn" data-prompt="Create a practice problem about this topic">Practice Problem</button>
+        <button class="suggestion-btn" data-prompt="I'm still confused, can you explain this another way?">Still Confused</button>
+        <button class="suggestion-btn" data-prompt="Can you explain this in more detail?">Explain More</button>
+        <button class="suggestion-btn" data-prompt="Create a mini practice test about this topic">Practice Test</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script_new.js"></script>
+</body>
+</html>

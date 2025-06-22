@@ -1,21 +1,3 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyD9FZm-3-o3Z5i3pPNk8uvwsnFuBKIB5-A",
-  authDomain: "nsu-bot-server-test.firebaseapp.com",
-  projectId: "nsu-bot-server-test",
-  storageBucket: "nsu-bot-server-test.firebasestorage.app",
-  messagingSenderId: "169660316820",
-  appId: "1:169660316820:web:b5555a63473a9f48c08881"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
 // Function to send message to server
 async function sendMessage(message) {
   const responseDiv = document.getElementById('response');
@@ -26,9 +8,9 @@ async function sendMessage(message) {
 
   try {
     console.log('Sending request with prompt:', message);
-      // Use the deployed Firebase function URL
-    // Format: https://<region>-<project-id>.cloudfunctions.net/chatbot
-    const response = await fetch('https://us-central1-nsu-bot-server-test.cloudfunctions.net/chatbot', {
+    
+    // Use the Express server
+    const response = await fetch('http://localhost:3000/api/chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

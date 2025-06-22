@@ -1,8 +1,9 @@
-// Variable to store the last answer for context
+// Variables to store context
 let lastAnswer = '';
+let originalQuestion = '';
 
 // Function to send message to server
-async function sendMessage(message, includeLastAnswer = false) {
+async function sendMessage(message, includeContext = false, contextType = '') {
   const responseDiv = document.getElementById('response');
   const suggestionsDiv = document.getElementById('suggestions');
   
@@ -12,10 +13,27 @@ async function sendMessage(message, includeLastAnswer = false) {
   try {
     console.log('Sending request with prompt:', message);
     
-    // If includeLastAnswer is true, add the last answer as context
+    // Process the message based on context type
     let finalMessage = message;
-    if (includeLastAnswer && lastAnswer) {
-      finalMessage = `Regarding this previous explanation: "${lastAnswer}"\n\n${message}`;
+    
+    if (includeContext) {
+      if (contextType === 'explain' && lastAnswer) {
+        finalMessage = `Regarding this previous explanation: "${lastAnswer}"\n\n${message}`;
+      } 
+      else if (contextType === 'practice' && originalQuestion) {
+        finalMessage = `Based on this original question: "${originalQuestion}"\n\n${message}`;
+      }
+      else if (contextType === 'confused' && lastAnswer) {
+        finalMessage = `I was confused by this explanation: "${lastAnswer}"\n\nThe original question was: "${originalQuestion}"\n\n${message}`;
+      }
+      else if (contextType === 'test' && originalQuestion) {
+        finalMessage = `Create a mini practice test about the concepts in this question: "${originalQuestion}"\n\n${message}`;
+      }
+    }
+    
+    // Check if this is a new original question (not a follow-up)
+    if (!includeContext) {
+      originalQuestion = message;
     }
     
     // Use the Express server
@@ -63,10 +81,28 @@ document.querySelectorAll('.suggestion-btn').forEach(button => {
     const prompt = button.getAttribute('data-prompt');
     document.getElementById('prompt').value = prompt;
     
-    // Check if this is the "Explain More" button
-    const includeLastAnswer = prompt === "Can you explain this in more detail?";
+    // Determine which context to include based on the button
+    let includeContext = false;
+    let contextType = '';
     
-    sendMessage(prompt, includeLastAnswer);
+    if (prompt === "Can you explain this in more detail?") {
+      includeContext = true;
+      contextType = 'explain';
+    } 
+    else if (prompt === "Create a practice problem about this topic") {
+      includeContext = true;
+      contextType = 'practice';
+    }
+    else if (prompt === "I'm still confused, can you explain this another way?") {
+      includeContext = true;
+      contextType = 'confused';
+    }
+    else if (prompt === "Create a mini practice test about this topic") {
+      includeContext = true;
+      contextType = 'test';
+    }
+    
+    sendMessage(prompt, includeContext, contextType);
   });
 });
 
